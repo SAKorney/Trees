@@ -1,13 +1,14 @@
 namespace Trees.Impl;
 
-public class TreeIteratorRec<T> : ITreeIterator<T>
+public class TreeIteratorRec
 {
-    public IEnumerable<Tree<T>> Iterate(Tree<T> root)
+    public static IEnumerable<Tree<T>> Iterate<T>(Tree<T> root)
     {
         yield return root;
         foreach (var item in root.Children)
         {
-            Iterate(item);
+            foreach(var subItem in Iterate(item))
+                yield return subItem;
         }
     }
 }

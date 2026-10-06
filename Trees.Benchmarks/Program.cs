@@ -15,10 +15,10 @@ public class TreeBenchmark
         _root = IntTreeGenerator.Generate();
     }
 
-    private int Traverse(Tree<int> root, ITreeIterator<int> iterator)
+    private int Traverse(IEnumerable<Tree<int>> root)
     {
         int sum = 0;
-        foreach (var node in iterator.Iterate(root))
+        foreach (var node in root)
         {
             sum += node.Value;
         }
@@ -26,13 +26,16 @@ public class TreeBenchmark
     }
 
     [Benchmark]
-    public int BFS() => Traverse(_root, new TreeIteratorBFS<int>());
+    public int BFS() => Traverse(_root.GetBfsEnumerator());
 
     [Benchmark]
-    public int DFS() => Traverse(_root, new TreeIteratorDFS<int>());
+    public int DFS() => Traverse(_root.GetDfsEnumerator());
 
     [Benchmark]
-    public int Rec() => Traverse(_root, new TreeIteratorRec<int>());
+    public int Rec() => Traverse(_root.GetRecEnumerator());
+
+    [Benchmark]
+    public int RecMethod() => Traverse(TreeIteratorRec.Iterate(_root));
 }
 
 
